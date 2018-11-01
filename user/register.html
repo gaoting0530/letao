@@ -39,7 +39,7 @@
                         <span class="mui-icon mui-icon-eye"></span>
                     </div>
                     <div class="mui-input-row">
-                        <input name="vCode" type="text" placeholder="认证码">
+                        <input name="vCode" class="vCode" type="text" placeholder="认证码">
                         <a href="javascript:;" class="btn_getCode mui-btn mui-btn-primary">获取认证码</a>
                     </div>
                     <button class="mui-btn mui-btn-primary btn_login">注册</button>
@@ -66,16 +66,32 @@
     $('form').on('submit',function() {
         var data = $(this).serialize();
         $.ajax({
-            url: 'http://localhost:3000/user/register',
+            url: '/api/user/register',
             type: 'post',
             data: data,
             
-            success: function(msg) {
-                console.log(msg);
+            success: function(info) {
+                if(info.success) {
+                    location.href= '/user/login.html';
+                }else {
+                    alert(info.message)
+                }
             }
         })
         return false;
     })
+    //获取注册验证码
+    $('.btn_getCode').on( 'click',function() {
+        $.ajax({
+        url: '/api/user/vCode',
+        type: 'get',
+        success: function(msg) {
+            // alert(msg.vCode);
+            $('.vCode').val(msg.vCode)
+        }
+    })
+    })
+   
 
     </script>
 </body>

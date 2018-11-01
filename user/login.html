@@ -50,19 +50,29 @@
     //获取用户输入的表单信息
     //提交数据到服务端
     //等待服务端的检测结果
+    var str = location.search.slice(1);//url=xxxxxx;
+    var reg = /url=(.+)/;
+    var match = reg.exec(str);
+    console.log(match);
+    // if(match) {
+    //     match[1];
+    // }else {
+    //     index.html;
+    // }
+    var url = match && match[1];
    $('form').on('submit',function() {
        var data = $(this).serialize();
        $.ajax({
-           url: 'http://localhost:3000/user/login',
+           url: '/api/user/login',
            type: 'post',
            data: data,
-           xhrFields: {
-            withCredentials: true  
-           },
+          
            success: function(info) {
             //    console.log(info);
                 if(info.success) {
-                    location.href = '../index.html';
+                    location.href = url;
+                }else {
+                    alert(info.message);
                 }
            }
            

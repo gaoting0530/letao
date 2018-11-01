@@ -25,7 +25,7 @@
                 <a class="mui-navigate-right" href="#account">
                     <img class="mui-media-object mui-pull-left head-img" id="head-img" src="../images/user.jpg">
                     <div class="mui-media-body">
-                        Hello MUI
+                        <span class="user"></span>
                         <p class="mui-ellipsis">账号:hellomui</p>
                     </div>
                 </a>
@@ -43,7 +43,7 @@
             </li>
         </ul>
         <div class="p20">
-            <a href="login.html" class="mui-btn btn_outLogin">退出登录</a>
+            <a href="javascript:;" class="mui-btn btn_outLogin">退出登录</a>
         </div>
     </div>
     <footer class="cz_tabs">
@@ -56,20 +56,39 @@
 <script src="../res/mui/js/mui.min.js"></script>
 <script src="../admin/assets/jquery/jquery.js"></script>
 <script>
+    var name_user = $('.user');
     $.ajax({
         type: 'get',
-        url: 'http://localhost:3000/user/queryUserMessage',
+        url: '/api/user/queryUserMessage',
         //cookie跨域，浏览器默认不会跨域发送cookie
         //前端和后端需要设置对cookie的支持
-        xhrFields: {   
-            //让浏览器跨域发送cookie
-            withCredentials: true   
-            } ,
+
+        //反向代理：跨域是浏览器限制的，只要绕过浏览器就能跨域，浏览器可以跟apache有一个“约定”，如果浏览器访问的是/abc开头，请求帮忙访问http://localhost:3000
+        // xhrFields: {   
+        //     //让浏览器跨域发送cookie
+        //     withCredentials: true   
+        //     } ,
         
         success: function(msg) {
-            console.log(msg)
+            // console.log(msg)
+            if(msg.error) {
+                location.href = './login.html?url=' + location.href;
+            }
+            name_user.html(msg.username);
+
         }
         //接收跨域来的cookie
+    })
+    $('.btn_outLogin').on('click', function() {
+        $.ajax({
+            url: '/api/user/logout',
+            type: 'get',
+            success: function(info) {
+                if(info.success) {
+                    location.href = '/';
+                }
+            }
+        })
     })
 </script>
 </body>

@@ -225,7 +225,7 @@
             console.log(xhr.responseText);
         }
     })
-    xhr.open('get','http://localhost:3000/product/queryProduct?page=1&pageSize=1');
+    xhr.open('get','/api/product/queryProduct?page=1&pageSize=1');
     xhr.send();
     mui(function(){
         mui('.mui-slider').slider({
